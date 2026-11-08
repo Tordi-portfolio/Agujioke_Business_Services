@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Frequently Asked Questions{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">FAQ</span>
+    <h1>Frequently asked questions</h1>
+    <p class="lead">Answers about our services, how the dashboard works and how we handle compliance. Cannot find what you need? <a href="{% url 'contact' %}">Send us a message</a>.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container narrow">
+    <h2>General</h2>
+    {% for f in general %}
+      <details class="faq-item"><summary>{{ f.question }}</summary><p>{{ f.answer }}</p></details>
+    {% endfor %}
+
+    {% for s in services %}
+      {% if s.faqs.all %}
+      <h2 class="faq-service">{{ s.icon }} {{ s.title }}</h2>
+      {% for f in s.faqs.all %}
+        {% if f.is_active %}
+        <details class="faq-item"><summary>{{ f.question }}</summary><p>{{ f.answer }}</p></details>
+        {% endif %}
+      {% endfor %}
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

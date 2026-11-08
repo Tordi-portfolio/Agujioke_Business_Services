@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Enquiries{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+  <div class="container dash-head">
+    <div>
+      <span class="eyebrow">Staff only</span>
+      <h1>Contact-form enquiries <span class="staff-badge">Admin</span></h1>
+    </div>
+    <a href="{% url 'staff_dashboard' %}" class="btn btn-outline-light">← Staff dashboard</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container narrow">
+    <div class="chip-row">
+      <a class="chip {% if show == 'new' %}active{% endif %}" href="?show=new">New</a>
+      <a class="chip {% if show == 'handled' %}active{% endif %}" href="?show=handled">Handled</a>
+      <a class="chip {% if show == 'all' %}active{% endif %}" href="?show=all">All</a>
+    </div>
+
+    {% for i in page.object_list %}
+    <div class="inquiry {% if not i.is_handled %}unhandled{% endif %}">
+      <div class="inquiry-head">
+        <div>
+          <strong>{{ i.subject }}</strong><br>
+          <small class="muted">{{ i.name }} · <a href="mailto:{{ i.email }}?subject=Re: {{ i.subject|urlencode }}">{{ i.email }}</a>{% if i.phone %} · {{ i.phone }}{% endif %} · {{ i.created|date:"d M Y, H:i" }}</small>
+        </div>
+        <div>{% if i.service %}<span class="chip">{{ i.service.title }}</span>{% endif %}</div>
+      </div>
+      <p class="pre-wrap">{{ i.message }}</p>
+      <div class="row-actions">
+        <a class="btn btn-small btn-gold" href="mailto:{{ i.email }}?subject=Re: {{ i.subject|urlencode }}">Reply by email</a>
+        <form method="post" action="{% url 'staff_inquiry_toggle' i.pk %}" class="inline-form">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <button type="submit" class="btn btn-small btn-outline">{% if i.is_handled %}Mark as new{% else %}Mark as handled{% endif %}</button>
+        </form>
+      </div>
+    </div>
+    {% empty %}
+    <div class="card empty"><p>No enquiries here.</p></div>
+    {% endfor %}
+
+    <div class="pager">
+      <span class="muted">Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+      <span>
+        {% if page.has_previous %}<a class="btn btn-small btn-ghost" href="?show={{ show }}&page={{ page.previous_page_number }}">← Previous</a>{% endif %}
+        {% if page.has_next %}<a class="btn btn-small btn-ghost" href="?show={{ show }}&page={{ page.next_page_number }}">Next →</a>{% endif %}
+      </span>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}{{ service.title }}{% endblock %}
+{% block meta_description %}{{ service.summary|truncatechars:155 }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{% url 'home' %}">Home</a> / <a href="{% url 'service_list' %}">Services</a> / {{ service.title }}
+    </nav>
+    <div class="hero-title-row">
+      <span class="hero-icon">{{ service.icon }}</span>
+      <div>
+        <h1>{{ service.title }}</h1>
+        <p class="lead">{{ service.tagline }}</p>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <a href="{% url 'request_new' %}?service={{ service.slug }}" class="btn btn-gold">Request this service</a>
+      <a href="{% url 'contact' %}?service={{ service.slug }}" class="btn btn-outline-light">Ask a question</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container detail-layout">
+    <div class="detail-main">
+      <div class="prose">
+        <h2>Overview</h2>
+        {% for p in service.overview_paragraphs %}<p>{{ p }}</p>{% endfor %}
+      </div>
+
+      <h2>What we offer</h2>
+      <ul class="offer-grid">
+        {% for item in service.offerings_list %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+
+      <h2>How it works</h2>
+      <ol class="timeline">
+        {% for step in service.process_steps %}
+        <li>
+          <span class="timeline-num">{{ forloop.counter }}</span>
+          <div><h4>{{ step.title }}</h4><p>{{ step.text }}</p></div>
+        </li>
+        {% endfor %}
+      </ol>
+
+      <h2>Who this service is for</h2>
+      <ul class="check-list">
+        {% for item in service.audience_list %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+
+      {% if faqs %}
+      <h2>Frequently asked questions</h2>
+      {% for f in faqs %}
+        <details class="faq-item"><summary>{{ f.question }}</summary><p>{{ f.answer }}</p></details>
+      {% endfor %}
+      {% endif %}
+
+      <div class="note">
+        <strong>Please note:</strong> The information on this page is general guidance. Laws, fees and agency requirements change, so we confirm the current position for your specific case before any work begins. We cannot guarantee decisions made by government agencies, embassies or third parties.
+      </div>
+    </div>
+
+    <aside class="detail-side">
+      <div class="card sticky">
+        <h3>Get started</h3>
+        <p>Create a free account to submit a request and track it from your dashboard, or send us a quick enquiry.</p>
+        <a href="{% url 'request_new' %}?service={{ service.slug }}" class="btn btn-gold btn-block">Request this service</a>
+        <a href="{% url 'contact' %}?service={{ service.slug }}" class="btn btn-outline btn-block">Send an enquiry</a>
+        <a href="https://wa.me/{{ SITE.whatsapp }}" class="btn btn-ghost btn-block" target="_blank" rel="noopener">💬 WhatsApp us</a>
+        <hr>
+        <h4>Other services</h4>
+        <ul class="side-links">
+          {% for o in others %}<li><a href="{{ o.get_absolute_url }}">{{ o.icon }} {{ o.title }}</a></li>{% endfor %}
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

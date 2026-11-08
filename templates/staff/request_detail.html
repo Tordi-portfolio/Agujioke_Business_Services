@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Review {{ req.reference }}{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+  <div class="container">
+    <span class="eyebrow">Staff only · {{ req.reference }}</span>
+    <h1>{{ req.title }}</h1>
+    <p class="lead"><span class="pill {{ req.status }}">{{ req.get_status_display }}</span> &nbsp; {{ req.service.title }} · {{ req.get_urgency_display }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container dash-layout">
+    <div>
+      <div class="card">
+        <h2>Client's request</h2>
+        <dl class="detail-list">
+          <div><dt>Service</dt><dd>{{ req.service.title }}</dd></div>
+          <div><dt>Urgency</dt><dd>{{ req.get_urgency_display }}</dd></div>
+          <div><dt>Submitted</dt><dd>{{ req.created|date:"d M Y, H:i" }}</dd></div>
+          <div><dt>Last updated</dt><dd>{{ req.updated|date:"d M Y, H:i" }}</dd></div>
+        </dl>
+        <h3>Details</h3>
+        <p class="pre-wrap">{{ req.details }}</p>
+      </div>
+
+      <div class="card">
+        <h2>Your decision</h2>
+        {% if req.decided_at %}
+          <p class="muted">Last decision by <strong>{{ req.decided_by.get_full_name|default:req.decided_by.username }}</strong> on {{ req.decided_at|date:"d M Y, H:i" }}.</p>
+        {% endif %}
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="decision-buttons">
+            <button type="submit" name="quick" value="accepted" class="btn btn-accept">✔ Accept request</button>
+            <button type="submit" name="quick" value="rejected" class="btn btn-reject">✖ Reject request</button>
+          </div>
+          <p class="muted small">Use the buttons for a quick decision (add a note below first; a note is required when rejecting). Or choose any status manually and press <em>Save update</em>.</p>
+          {% include "partials/form_fields.html" with form=form %}
+          <button type="submit" class="btn btn-outline">Save update</button>
+        </form>
+        <p class="muted small">The client sees the status and your note on their dashboard and receives an email notification.</p>
+      </div>
+    </div>
+
+    <aside>
+      <div class="card client-box">
+        <h3>Client</h3>
+        <p><strong>{{ client.get_full_name|default:client.username }}</strong></p>
+        <p>✉️ <a href="mailto:{{ client.email }}">{{ client.email }}</a></p>
+        {% if profile %}
+          {% if profile.phone %}<p>📞 {{ profile.phone }}</p>{% endif %}
+          {% if profile.company %}<p>🏢 {{ profile.company }}</p>{% endif %}
+          {% if profile.country %}<p>🌍 {{ profile.country }}</p>{% endif %}
+          {% if profile.address %}<p>📍 {{ profile.address }}</p>{% endif %}
+          {% if profile.bio %}<hr><p class="muted small pre-wrap">{{ profile.bio }}</p>{% endif %}
+        {% endif %}
+        <p class="muted small">Member since {{ client.date_joined|date:"d M Y" }}</p>
+      </div>
+      <a href="{% url 'staff_request_list' %}" class="link-arrow">← Back to all requests</a>
+    </aside>
+  </div>
+</section>
+{% endblock %}

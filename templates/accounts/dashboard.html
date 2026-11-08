@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+  <div class="container dash-head">
+    <div>
+      <span class="eyebrow">Client dashboard</span>
+      <h1>Hello, {{ user.first_name|default:user.username }} 👋</h1>
+      <p class="lead">Here is a summary of your requests and activity.</p>
+    </div>
+    <a href="{% url 'request_new' %}" class="btn btn-gold">+ New service request</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="stat-grid">
+      <div class="stat"><span class="stat-num">{{ stats.total }}</span><span>Total requests</span></div>
+      <div class="stat"><span class="stat-num">{{ stats.pending }}</span><span>Pending / in review</span></div>
+      <div class="stat"><span class="stat-num">{{ stats.active }}</span><span>Accepted / in progress</span></div>
+      <div class="stat"><span class="stat-num">{{ stats.completed }}</span><span>Completed</span></div>
+    </div>
+
+    <div class="dash-layout">
+      <div>
+        <div class="card">
+          <div class="card-head">
+            <h2>Recent requests</h2>
+            <a href="{% url 'request_list' %}" class="link-arrow">View all →</a>
+          </div>
+          {% if recent_requests %}
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Ref</th><th>Request</th><th>Service</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody>
+                {% for r in recent_requests %}
+                <tr>
+                  <td><a href="{{ r.get_absolute_url }}">{{ r.reference }}</a></td>
+                  <td>{{ r.title }}</td>
+                  <td>{{ r.service.title }}</td>
+                  <td><span class="pill {{ r.status }}">{{ r.get_status_display }}</span></td>
+                  <td>{{ r.created|date:"d M Y" }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="empty">
+            <p>You have not submitted any requests yet.</p>
+            <a href="{% url 'request_new' %}" class="btn btn-gold">Submit your first request</a>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="card">
+          <h2>Start a new request</h2>
+          <p class="muted">Pick a service to begin.</p>
+          <div class="chip-row">
+            {% for s in nav_services %}
+              <a class="chip" href="{% url 'request_new' %}?service={{ s.slug }}">{{ s.icon }} {{ s.title }}</a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <h3>My profile</h3>
+          <p><strong>{{ user.get_full_name|default:user.username }}</strong><br>
+          <span class="muted">{{ user.email }}</span></p>
+          {% if profile.company %}<p>🏢 {{ profile.company }}</p>{% endif %}
+          {% if profile.country %}<p>🌍 {{ profile.country }}</p>{% endif %}
+          {% if profile.phone %}<p>📞 {{ profile.phone }}</p>{% endif %}
+          <div class="progress" role="progressbar" aria-valuenow="{{ profile.completeness }}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar" style="width: {{ profile.completeness }}%"></div>
+          </div>
+          <small class="muted">Profile {{ profile.completeness }}% complete</small>
+          <div class="stack-actions">
+            <a href="{% url 'profile_edit' %}" class="btn btn-small btn-outline btn-block">Edit profile</a>
+            <a href="{% url 'password_change' %}" class="btn btn-small btn-ghost btn-block">Change password</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>My enquiries</h3>
+          {% if inquiries %}
+            <ul class="plain-list">
+              {% for i in inquiries %}
+              <li><strong>{{ i.subject }}</strong><br><small class="muted">{{ i.created|date:"d M Y" }} · {% if i.is_handled %}Handled{% else %}Awaiting reply{% endif %}</small></li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="muted">Enquiries you send while logged in will appear here.</p>
+          {% endif %}
+          <a href="{% url 'contact' %}" class="link-arrow">Send an enquiry →</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}

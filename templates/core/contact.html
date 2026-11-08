@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Contact</span>
+    <h1>Let us talk about your project</h1>
+    <p class="lead">Send an enquiry and we aim to reply within one working day. You do not need an account to contact us.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container contact-layout">
+    <div class="card form-card">
+      <h2>Send an enquiry</h2>
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% include "partials/form_fields.html" with form=form %}
+        <button type="submit" class="btn btn-gold btn-block">Send message</button>
+      </form>
+    </div>
+
+    <aside class="contact-info">
+      <div class="card">
+        <h3>Contact details</h3>
+        <ul class="contact-list">
+          <li><span>📍</span><div><strong>Office</strong><br>{{ SITE.address }}</div></li>
+          <li><span>📞</span><div><strong>Phone</strong><br><a href="tel:{{ SITE.phone }}">{{ SITE.phone }}</a></div></li>
+          <li><span>✉️</span><div><strong>Email</strong><br><a href="mailto:{{ SITE.email }}">{{ SITE.email }}</a></div></li>
+          <li><span>💬</span><div><strong>WhatsApp</strong><br><a href="https://wa.me/{{ SITE.whatsapp }}" target="_blank" rel="noopener">Start a chat</a></div></li>
+          <li><span>🕒</span><div><strong>Hours</strong><br>{{ SITE.hours }}</div></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Prefer to track your request?</h3>
+        <p>Create a free account to submit detailed service requests and follow progress from your personal dashboard.</p>
+        {% if user.is_authenticated %}
+          <a href="{% url 'request_new' %}" class="btn btn-outline btn-block">New service request</a>
+        {% else %}
+          <a href="{% url 'register' %}" class="btn btn-outline btn-block">Create account</a>
+        {% endif %}
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

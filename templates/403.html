@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Access denied{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+  <div class="container auth-wrap">
+    <div class="card auth-card center">
+      <h1>🔒 Access denied</h1>
+      <p>This area is for staff only. If you are a client, your requests are on your own dashboard.</p>
+      <a href="{% url 'dashboard' %}" class="btn btn-gold btn-block">Go to my dashboard</a>
+      <a href="{% url 'home' %}" class="btn btn-ghost btn-block">Back to home</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

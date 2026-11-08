@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Request {{ req.reference }}{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+  <div class="container">
+    <span class="eyebrow">{{ req.reference }}</span>
+    <h1>{{ req.title }}</h1>
+    <p class="lead"><span class="pill {{ req.status }}">{{ req.get_status_display }}</span> &nbsp; {{ req.service.title }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container narrow">
+    <div class="card">
+      <dl class="detail-list">
+        <div><dt>Service</dt><dd><a href="{{ req.service.get_absolute_url }}">{{ req.service.title }}</a></dd></div>
+        <div><dt>Urgency</dt><dd>{{ req.get_urgency_display }}</dd></div>
+        <div><dt>Submitted</dt><dd>{{ req.created|date:"d M Y, H:i" }}</dd></div>
+        <div><dt>Last updated</dt><dd>{{ req.updated|date:"d M Y, H:i" }}</dd></div>
+      </dl>
+      <h3>Your details</h3>
+      <p class="pre-wrap">{{ req.details }}</p>
+    </div>
+
+    {% if req.status == 'accepted' %}
+    <div class="message success">✔ Good news: your request has been <strong>accepted</strong>. Our team will be in touch with the next steps.</div>
+    {% elif req.status == 'rejected' %}
+    <div class="message error">✖ Unfortunately we are unable to proceed with this request. See the note below. You are welcome to submit a new request or <a href="{% url 'contact' %}">contact us</a>.</div>
+    {% endif %}
+
+    {% if req.admin_note %}
+    <div class="card note-card">
+      <h3>Note from our team</h3>
+      <p class="pre-wrap">{{ req.admin_note }}</p>
+    </div>
+    {% endif %}
+
+    <div class="hero-actions">
+      <a href="{% url 'dashboard' %}" class="btn btn-outline">← Dashboard</a>
+      {% if req.status == 'pending' or req.status == 'in_review' %}
+      <form method="post" action="{% url 'request_cancel' req.pk %}" onsubmit="return confirm('Cancel this request?');">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-ghost danger">Cancel request</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

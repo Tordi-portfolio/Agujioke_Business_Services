@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Staff Panel{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+  <div class="container dash-head">
+    <div>
+      <span class="eyebrow">Staff only</span>
+      <h1>Review panel <span class="staff-badge">Admin</span></h1>
+      <p class="lead">See every client request, accept or reject it, and respond to enquiries.</p>
+    </div>
+    <div class="hero-actions">
+      <a href="{% url 'staff_request_list' %}" class="btn btn-gold">All requests</a>
+      <a href="{% url 'staff_inquiry_list' %}" class="btn btn-outline-light">Enquiries{% if new_inquiries_total %} ({{ new_inquiries_total }}){% endif %}</a>
+      <a href="{% url 'admin:index' %}" class="btn btn-outline-light">Django admin</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="stat-grid">
+      <div class="stat warn"><span class="stat-num">{{ counts.pending }}</span><span>Pending (new)</span></div>
+      <div class="stat"><span class="stat-num">{{ counts.in_review }}</span><span>In review</span></div>
+      <div class="stat ok"><span class="stat-num">{{ counts.accepted }}</span><span>Accepted</span></div>
+      <div class="stat"><span class="stat-num">{{ counts.in_progress }}</span><span>In progress</span></div>
+      <div class="stat ok"><span class="stat-num">{{ counts.completed }}</span><span>Completed</span></div>
+      <div class="stat warn"><span class="stat-num">{{ counts.rejected }}</span><span>Rejected</span></div>
+    </div>
+
+    <div class="dash-layout">
+      <div class="card">
+        <div class="card-head">
+          <h2>Waiting for your decision ({{ needs_review_total }})</h2>
+          <a href="{% url 'staff_request_list' %}?status=pending" class="link-arrow">View all →</a>
+        </div>
+        {% if needs_review %}
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Ref</th><th>Client</th><th>Request</th><th>Service</th><th>Urgency</th><th>Date</th><th></th></tr></thead>
+            <tbody>
+              {% for r in needs_review %}
+              <tr>
+                <td>{{ r.reference }}</td>
+                <td>{{ r.user.get_full_name|default:r.user.username }}</td>
+                <td>{{ r.title }}</td>
+                <td>{{ r.service.title }}</td>
+                <td>{{ r.get_urgency_display }}</td>
+                <td>{{ r.created|date:"d M Y" }}</td>
+                <td><a class="btn btn-small btn-gold" href="{% url 'staff_request_detail' r.pk %}">Review</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="empty"><p>🎉 Nothing waiting. All requests have been reviewed.</p></div>
+        {% endif %}
+      </div>
+
+      <aside>
+        <div class="card">
+          <h3>New enquiries ({{ new_inquiries_total }})</h3>
+          {% if new_inquiries %}
+          <ul class="plain-list">
+            {% for i in new_inquiries %}
+            <li><strong>{{ i.subject }}</strong><br><small class="muted">{{ i.name }} · {{ i.created|date:"d M Y" }}</small></li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="muted">No unanswered enquiries.</p>
+          {% endif %}
+          <a href="{% url 'staff_inquiry_list' %}" class="link-arrow">Open enquiries →</a>
+        </div>
+        <div class="card">
+          <h3>Totals</h3>
+          <p><strong>{{ total }}</strong> requests received in total.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}

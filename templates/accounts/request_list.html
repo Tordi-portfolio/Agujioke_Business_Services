@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}My Requests{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+  <div class="container dash-head">
+    <div>
+      <span class="eyebrow">Client dashboard</span>
+      <h1>My service requests</h1>
+    </div>
+    <a href="{% url 'request_new' %}" class="btn btn-gold">+ New request</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="chip-row">
+      <a class="chip {% if not status %}active{% endif %}" href="{% url 'request_list' %}">All</a>
+      {% for value, label in statuses %}
+        <a class="chip {% if status == value %}active{% endif %}" href="?status={{ value }}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="card">
+      {% if requests %}
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Ref</th><th>Request</th><th>Service</th><th>Urgency</th><th>Status</th><th>Submitted</th></tr></thead>
+          <tbody>
+            {% for r in requests %}
+            <tr>
+              <td><a href="{{ r.get_absolute_url }}">{{ r.reference }}</a></td>
+              <td>{{ r.title }}</td>
+              <td>{{ r.service.title }}</td>
+              <td>{{ r.get_urgency_display }}</td>
+              <td><span class="pill {{ r.status }}">{{ r.get_status_display }}</span></td>
+              <td>{{ r.created|date:"d M Y" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty"><p>No requests found.</p><a href="{% url 'request_new' %}" class="btn btn-gold">Submit a request</a></div>
+      {% endif %}
+    </div>
+    <p><a href="{% url 'dashboard' %}" class="link-arrow">← Back to dashboard</a></p>
+  </div>
+</section>
+{% endblock %}

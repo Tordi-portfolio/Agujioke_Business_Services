@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">About us</span>
+    <h1>A trade and business partner built on trust</h1>
+    <p class="lead">{{ SITE.name }}, led by {{ SITE.owner }}, helps companies and individuals do business in Nigeria and across Africa with confidence.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container two-col">
+    <div class="prose">
+      <h2>Who we are</h2>
+      <p>{{ SITE.name }} is a Lagos-based business services company led by {{ SITE.owner }}. We operate across trade, construction, travel, immigration, real estate and regulated product categories, which lets us offer something unusual: a single partner who can support a project from the first idea to final delivery.</p>
+      <p>Our founder works as a self-employed entrepreneur and consultant, helping foreign companies operate in Nigeria and Africa. That mission shapes everything we do. International firms often arrive with excellent products, capital and expertise, but without a local team that understands the registrations, relationships and realities of the market. We fill that gap.</p>
+      <p>We also support Nigerians and Africans who want to trade internationally, expand their businesses, invest in property, travel abroad or formalise their companies. The same principles apply whether you are a multinational or an individual: careful preparation, honest communication and respect for the rules.</p>
+
+      <h2>What we do</h2>
+      <p>Our work falls into eleven connected service lines: import services, export services, general merchant supply, general contracting, travel and tours, immigration consultancy, real estate, FMCG distribution, business registration, wines and spirits and pharmaceutical supply. Each service has its own page with a detailed explanation of what we offer and how the process works.</p>
+      <p>What makes the combination powerful is that the services connect. A foreign investor might register a company with us, rent an office through our real-estate service, bring staff in with our immigration support, source equipment through our import service and have the premises fitted out by our contracting team. A Nigerian exporter might use our business registration, export and travel services to build and meet an international customer base.</p>
+
+      <h2>How we work</h2>
+      <p>We begin by listening. Most problems in trade and project delivery start with unclear requirements, so we ask detailed questions before offering any plan. Then we give you a written quotation, explain the steps and set realistic expectations on time and cost.</p>
+      <p>During delivery we coordinate the many parties involved, such as suppliers, shipping lines, clearing agents, government agencies, lawyers, surveyors, contractors and transporters, and we keep you informed. Where regulation matters, as it does for food, drugs, alcohol, immigration and property, we are open about what is required and we work strictly within the law.</p>
+    </div>
+
+    <aside class="side-stack">
+      <div class="card profile-card">
+        <div class="avatar">SA</div>
+        <h3>{{ SITE.owner }}</h3>
+        <p class="muted">Founder · Lagos, Nigeria</p>
+        <p>Entrepreneur and consultant helping foreign companies operate in Nigeria and Africa across trade, property, immigration and business services.</p>
+        <a href="{{ SITE.linkedin }}" class="btn btn-small btn-outline" target="_blank" rel="noopener">View LinkedIn profile</a>
+      </div>
+      <div class="card">
+        <h3>Our values</h3>
+        <ul class="check-list">
+          <li><strong>Integrity:</strong> honest advice, no false promises</li>
+          <li><strong>Compliance:</strong> we work within the law</li>
+          <li><strong>Clarity:</strong> clear quotations and timelines</li>
+          <li><strong>Reliability:</strong> we do what we say</li>
+          <li><strong>Partnership:</strong> your success is our success</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="container">
+    <div class="section-head center">
+      <h2>Our commitments to you</h2>
+    </div>
+    <div class="card-grid three">
+      <div class="card"><h3>Honest guidance</h3><p>We will tell you if something is not possible, not advisable or not legal. We would rather lose a sale than put you at risk with unlawful shortcuts.</p></div>
+      <div class="card"><h3>Confidentiality</h3><p>Your documents, plans and personal details are used only to deliver the service you requested, and shared only with the parties needed to complete it.</p></div>
+      <div class="card"><h3>Accountability</h3><p>You will always know who is responsible for your project and what stage it has reached. Your dashboard and our team keep you informed.</p></div>
+      <div class="card"><h3>Regional reach</h3><p>Based in Lagos, we support projects across Nigeria and work with partners across Africa and beyond.</p></div>
+      <div class="card"><h3>Fair pricing</h3><p>You receive a written quotation before work starts. If the scope changes, we discuss it with you before any extra cost applies.</p></div>
+      <div class="card"><h3>Long-term relationships</h3><p>We value repeat clients. Many engagements begin with one service and grow as your business expands.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container cta-inner">
+    <div><h2>Let us talk about your plans</h2><p>Share what you are working on and we will suggest the best way forward.</p></div>
+    <div class="hero-actions">
+      <a href="{% url 'contact' %}" class="btn btn-gold">Contact us</a>
+      <a href="{% url 'service_list' %}" class="btn btn-outline-light">View services</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

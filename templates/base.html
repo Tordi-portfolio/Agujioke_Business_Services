@@ -1,0 +1,128 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ SITE.name }}{% endblock %} | {{ SITE.name }}</title>
+  <meta name="description" content="{% block meta_description %}{{ SITE.name }}: import, export, general merchant, general contractor, travel and tours, immigration consultancy, real estate, FMCG, business registration, wines and spirits and pharma services in Lagos, Nigeria and across Africa.{% endblock %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <span>📍 {{ SITE.address }}</span>
+      <span class="topbar-right">
+        <a href="tel:{{ SITE.phone }}">📞 {{ SITE.phone }}</a>
+        <a href="mailto:{{ SITE.email }}">✉️ {{ SITE.email }}</a>
+      </span>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="{% url 'home' %}" class="brand">
+        <span class="brand-mark">S</span>
+        <span class="brand-text">{{ SITE.name }}<small>{{ SITE.owner }}</small></span>
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="main-nav">☰</button>
+
+      <nav id="main-nav" class="main-nav" aria-label="Main">
+        <a href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}class="active"{% endif %}>Home</a>
+        <a href="{% url 'about' %}" {% if request.resolver_match.url_name == 'about' %}class="active"{% endif %}>About</a>
+        <div class="dropdown">
+          <a href="{% url 'service_list' %}" class="{% if request.resolver_match.url_name == 'service_list' or request.resolver_match.url_name == 'service_detail' %}active{% endif %}">Services ▾</a>
+          <div class="dropdown-menu">
+            {% for s in nav_services %}
+              <a href="{{ s.get_absolute_url }}">{{ s.icon }} {{ s.title }}</a>
+            {% endfor %}
+          </div>
+        </div>
+        <a href="{% url 'faq' %}" {% if request.resolver_match.url_name == 'faq' %}class="active"{% endif %}>FAQ</a>
+        <a href="{% url 'contact' %}" {% if request.resolver_match.url_name == 'contact' %}class="active"{% endif %}>Contact</a>
+
+        <span class="nav-sep"></span>
+
+        {% if user.is_authenticated %}
+          {% if user.is_staff %}<a href="{% url 'staff_dashboard' %}" class="btn btn-small btn-gold">Staff Panel</a>{% endif %}
+          <a href="{% url 'dashboard' %}" class="btn btn-small btn-outline">My Dashboard</a>
+          <form method="post" action="{% url 'logout' %}" class="inline-form">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-small btn-ghost">Log out</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-small btn-ghost">Log in</a>
+          <a href="{% url 'register' %}" class="btn btn-small btn-gold">Create account</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  {% if messages %}
+  <div class="container messages">
+    {% for message in messages %}
+      <div class="message {{ message.tags }}" role="status">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h4>{{ SITE.name }}</h4>
+        <p>{{ SITE.tagline }}. Trade, travel, property and business-setup services from Lagos, Nigeria.</p>
+        <p class="muted">{{ SITE.hours }}</p>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          {% for s in nav_services %}
+            <li><a href="{{ s.get_absolute_url }}">{{ s.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="{% url 'about' %}">About us</a></li>
+          <li><a href="{% url 'faq' %}">FAQ</a></li>
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'dashboard' %}">My dashboard</a></li>
+          {% else %}
+            <li><a href="{% url 'login' %}">Client login</a></li>
+            <li><a href="{% url 'register' %}">Create account</a></li>
+          {% endif %}
+        </ul>
+      </div>
+      <div>
+        <h4>Get in touch</h4>
+        <ul>
+          <li>📍 {{ SITE.address }}</li>
+          <li><a href="tel:{{ SITE.phone }}">📞 {{ SITE.phone }}</a></li>
+          <li><a href="mailto:{{ SITE.email }}">✉️ {{ SITE.email }}</a></li>
+          <li><a href="https://wa.me/{{ SITE.whatsapp }}" target="_blank" rel="noopener">💬 WhatsApp</a></li>
+          <li><a href="{{ SITE.linkedin }}" target="_blank" rel="noopener">in LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© {% now "Y" %} {{ SITE.name }}. All rights reserved.</span>
+      <span class="muted">Information on this website is general guidance and not legal advice. Regulations change; requirements are confirmed at the time of engagement.</span>
+    </div>
+  </footer>
+
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

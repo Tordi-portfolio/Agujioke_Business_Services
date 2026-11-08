@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Our Services{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Our services</span>
+    <h1>Eleven services, one dependable partner</h1>
+    <p class="lead">Browse everything we offer. Open any service for a full explanation of what is included, how the process works, who it is for and answers to common questions. No account needed.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    {% for s in nav_services %}
+    <article class="service-row {% cycle '' 'flip' %}">
+      <div class="service-row-icon"><span>{{ s.icon }}</span></div>
+      <div class="service-row-body">
+        <h2><a href="{{ s.get_absolute_url }}">{{ s.title }}</a></h2>
+        <p class="card-tagline">{{ s.tagline }}</p>
+        <p>{{ s.summary }}</p>
+        <ul class="tag-list">
+          {% for item in s.offerings_list|slice:":4" %}<li>{{ item }}</li>{% endfor %}
+        </ul>
+        <div class="row-actions">
+          <a href="{{ s.get_absolute_url }}" class="btn btn-small btn-gold">Read details</a>
+          <a href="{% url 'request_new' %}?service={{ s.slug }}" class="btn btn-small btn-outline">Request this service</a>
+        </div>
+      </div>
+    </article>
+    {% empty %}
+    <p class="center">No services have been loaded yet. Run <code>python manage.py seed_services</code>.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container cta-inner">
+    <div><h2>Not sure which service you need?</h2><p>Describe your situation and we will point you in the right direction.</p></div>
+    <div class="hero-actions"><a href="{% url 'contact' %}" class="btn btn-gold">Ask us</a></div>
+  </div>
+</section>
+{% endblock %}

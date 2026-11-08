@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}All Client Requests{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+  <div class="container dash-head">
+    <div>
+      <span class="eyebrow">Staff only</span>
+      <h1>All client requests <span class="staff-badge">Admin</span></h1>
+    </div>
+    <a href="{% url 'staff_dashboard' %}" class="btn btn-outline-light">← Staff dashboard</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <form method="get" class="filter-bar">
+      <div class="form-group grow">
+        <label for="q">Search</label>
+        <input id="q" name="q" value="{{ q }}" class="form-control" placeholder="Client name, email, company, title…">
+      </div>
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" name="status" class="form-control">
+          <option value="">All</option>
+          {% for value, label in statuses %}
+            <option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="service">Service</label>
+        <select id="service" name="service" class="form-control">
+          <option value="">All</option>
+          {% for s in services %}
+            <option value="{{ s.slug }}" {% if service_slug == s.slug %}selected{% endif %}>{{ s.title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button class="btn btn-gold" type="submit">Filter</button>
+      <a class="btn btn-ghost" href="{% url 'staff_request_list' %}">Reset</a>
+    </form>
+
+    <div class="card">
+      {% if page.object_list %}
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Ref</th><th>Client</th><th>Company</th><th>Request</th><th>Service</th><th>Urgency</th><th>Status</th><th>Submitted</th><th></th></tr></thead>
+          <tbody>
+            {% for r in page.object_list %}
+            <tr>
+              <td>{{ r.reference }}</td>
+              <td>{{ r.user.get_full_name|default:r.user.username }}<br><small class="muted">{{ r.user.email }}</small></td>
+              <td>{{ r.user.profile.company|default:"—" }}</td>
+              <td>{{ r.title }}</td>
+              <td>{{ r.service.title }}</td>
+              <td>{{ r.get_urgency_display }}</td>
+              <td><span class="pill {{ r.status }}">{{ r.get_status_display }}</span></td>
+              <td>{{ r.created|date:"d M Y" }}</td>
+              <td><a class="btn btn-small btn-outline" href="{% url 'staff_request_detail' r.pk %}">Open</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="pager">
+        <span class="muted">Page {{ page.number }} of {{ page.paginator.num_pages }} · {{ page.paginator.count }} request{{ page.paginator.count|pluralize }}</span>
+        <span>
+          {% if page.has_previous %}<a class="btn btn-small btn-ghost" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.previous_page_number }}">← Previous</a>{% endif %}
+          {% if page.has_next %}<a class="btn btn-small btn-ghost" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.next_page_number }}">Next →</a>{% endif %}
+        </span>
+      </div>
+      {% else %}
+      <div class="empty"><p>No requests match your filters.</p></div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

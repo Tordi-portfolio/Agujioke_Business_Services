@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block title %}Import, Export, Real Estate, Travel &amp; Business Services{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <span class="eyebrow">Lagos, Nigeria · Serving Nigeria &amp; Africa</span>
+      <h1>Helping foreign companies operate in Nigeria &amp; Africa</h1>
+      <p class="lead">One trusted partner for import and export, general merchandise, construction, travel, immigration, real estate, FMCG, business registration, wines &amp; spirits and pharmaceutical supply. We handle the paperwork, people and logistics so you can focus on growing your business.</p>
+      <div class="hero-actions">
+        <a href="{% url 'service_list' %}" class="btn btn-gold">Explore our services</a>
+        <a href="{% url 'contact' %}" class="btn btn-outline-light">Talk to us</a>
+      </div>
+      <ul class="hero-points">
+        <li>✔ Eleven service lines under one roof</li>
+        <li>✔ Clear written quotations before work begins</li>
+        <li>✔ Free client dashboard to track your requests</li>
+      </ul>
+    </div>
+    <aside class="hero-card" aria-label="Quick links">
+      <h3>What do you need today?</h3>
+      <ul class="quick-list">
+        {% for s in nav_services|slice:":6" %}
+          <li><a href="{{ s.get_absolute_url }}"><span>{{ s.icon }}</span> {{ s.title }} <em>→</em></a></li>
+        {% endfor %}
+      </ul>
+      <a href="{% url 'service_list' %}" class="link-arrow">See all {{ nav_services|length }} services →</a>
+    </aside>
+  </div>
+</section>
+
+<section class="strip">
+  <div class="container strip-grid">
+    <div><strong>{{ nav_services|length }}</strong><span>Service lines</span></div>
+    <div><strong>Nigeria &amp; Africa</strong><span>Regional coverage</span></div>
+    <div><strong>End-to-end</strong><span>From planning to delivery</span></div>
+    <div><strong>24/7</strong><span>Online requests and tracking</span></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow dark">Our services</span>
+      <h2>Everything you need to trade, build and expand in Africa</h2>
+      <p>Whether you are importing machinery, exporting farm produce, buying land, setting up a company, moving staff or planning a trip, our services work together so that nothing falls through the cracks.</p>
+    </div>
+    <div class="card-grid">
+      {% for s in nav_services %}
+      <article class="card service-card">
+        <div class="icon-badge">{{ s.icon }}</div>
+        <h3><a href="{{ s.get_absolute_url }}">{{ s.title }}</a></h3>
+        <p class="card-tagline">{{ s.tagline }}</p>
+        <p>{{ s.summary }}</p>
+        <a href="{{ s.get_absolute_url }}" class="link-arrow">Learn more →</a>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="container two-col">
+    <div>
+      <span class="eyebrow dark">Why work with us</span>
+      <h2>A single, accountable partner on the ground in Nigeria</h2>
+      <p>Doing business in a new market is difficult when each task involves a different agent, a different set of rules and a different person to chase. We reduce that friction by acting as one coordinated point of contact for the whole journey, from the first enquiry to the final delivery.</p>
+      <p>Our clients range from individuals making their first purchase to established companies expanding across the continent. Whatever the size of the project, we apply the same standards: honesty about what is possible, clear communication, careful documentation and respect for the law.</p>
+      <p>Because our services connect, your project can flow naturally from one stage to the next. A foreign investor can register a company, secure office space, bring in staff and source equipment, all through one relationship and one dashboard.</p>
+    </div>
+    <div class="feature-list">
+      <div class="feature"><span>🤝</span><div><h4>Integrity first</h4><p>We never promise approvals we cannot control, and we never cut legal corners. You get honest advice, including when the answer is "not yet" or "not that way".</p></div></div>
+      <div class="feature"><span>🧭</span><div><h4>Local knowledge</h4><p>We understand how ports, registries, agencies and markets actually work in Nigeria, which helps you avoid delays and costly mistakes.</p></div></div>
+      <div class="feature"><span>📑</span><div><h4>Transparent pricing</h4><p>Every engagement begins with a written quotation, so the scope, timeline and cost are agreed before work starts.</p></div></div>
+      <div class="feature"><span>📲</span><div><h4>Stay informed</h4><p>Create a free account to submit requests, follow progress and read notes from our team whenever it suits you.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow dark">How it works</span>
+      <h2>Simple steps from idea to result</h2>
+      <p>Every service has its own detailed process, but they all follow the same reliable pattern.</p>
+    </div>
+    <div class="steps-row">
+      <div class="step"><span class="step-num">1</span><h4>Tell us your goal</h4><p>Send an enquiry or create an account and submit a request describing what you need.</p></div>
+      <div class="step"><span class="step-num">2</span><h4>Get a clear plan</h4><p>We review your request, ask the right questions and respond with options, timelines and a written quotation.</p></div>
+      <div class="step"><span class="step-num">3</span><h4>We do the work</h4><p>We coordinate suppliers, agencies, professionals and logistics on your behalf.</p></div>
+      <div class="step"><span class="step-num">4</span><h4>Track and complete</h4><p>Follow progress on your dashboard and receive your documents, goods or results.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow dark">Who we serve</span>
+      <h2>Built for businesses and individuals at every stage</h2>
+    </div>
+    <div class="card-grid three">
+      <div class="card"><h3>🌍 Foreign companies</h3><p>Entering Nigeria or the wider African market? We help you register, hire, source, ship, find premises and distribute, with a local partner who explains the rules and keeps the process moving.</p></div>
+      <div class="card"><h3>🏢 Local businesses</h3><p>Growing traders, manufacturers and service providers use us to import supplies, reach export buyers, formalise their companies and expand into new product lines.</p></div>
+      <div class="card"><h3>👤 Individuals &amp; diaspora</h3><p>Buying property, planning travel, applying for visas or starting a first business? We offer clear guidance and a trusted presence on the ground for people who cannot be here in person.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container two-col narrow-gap">
+    <div>
+      <span class="eyebrow dark">Your client dashboard</span>
+      <h2>Explore freely. Sign up when you are ready.</h2>
+      <p>You can browse every page of this website without an account. When you want to go further, create a free account to unlock your personal dashboard.</p>
+      <ul class="check-list">
+        <li>Submit service requests in a few minutes</li>
+        <li>See live status updates and notes from our team</li>
+        <li>Keep all your requests and enquiries in one place</li>
+        <li>Update your company and contact details securely</li>
+      </ul>
+      <div class="hero-actions">
+        {% if user.is_authenticated %}
+          <a href="{% url 'dashboard' %}" class="btn btn-gold">Go to my dashboard</a>
+        {% else %}
+          <a href="{% url 'register' %}" class="btn btn-gold">Create free account</a>
+          <a href="{% url 'login' %}" class="btn btn-outline">Log in</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="mock-dash" aria-hidden="true">
+      <div class="mock-row"><b>REQ-00012</b><span>Import clearance</span><i class="pill in_progress">In progress</i></div>
+      <div class="mock-row"><b>REQ-00009</b><span>Business registration</span><i class="pill completed">Completed</i></div>
+      <div class="mock-row"><b>REQ-00007</b><span>Property due diligence</span><i class="pill in_review">In review</i></div>
+      <p class="muted">Illustration of the dashboard layout</p>
+    </div>
+  </div>
+</section>
+
+{% if faqs %}
+<section class="section alt">
+  <div class="container narrow">
+    <div class="section-head center">
+      <span class="eyebrow dark">Common questions</span>
+      <h2>Quick answers</h2>
+    </div>
+    {% for f in faqs %}
+      <details class="faq-item"><summary>{{ f.question }}</summary><p>{{ f.answer }}</p></details>
+    {% endfor %}
+    <p class="center"><a href="{% url 'faq' %}" class="link-arrow">See all questions →</a></p>
+  </div>
+</section>
+{% endif %}
+
+<section class="cta">
+  <div class="container cta-inner">
+    <div>
+      <h2>Ready to start your project?</h2>
+      <p>Tell us what you need and we will come back with a clear plan and quotation.</p>
+    </div>
+    <div class="hero-actions">
+      <a href="{% url 'contact' %}" class="btn btn-gold">Send an enquiry</a>
+      <a href="https://wa.me/{{ SITE.whatsapp }}" class="btn btn-outline-light" target="_blank" rel="noopener">Chat on WhatsApp</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
